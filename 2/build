@@ -1,0 +1,7 @@
+g++ 2.cpp -std=c++11
+echo "">out
+echo "">inter
+./a.out
+cat inter
+cat out
+
