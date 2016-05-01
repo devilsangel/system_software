@@ -71,15 +71,15 @@ int main(){
 				pair<string,list<int>> p;
 				p.first=decToHex(locctr,4);
 				symtab[l.label]=p;
-			}
-			else{
+			}else{
 				symtab[l.label].first=decToHex(locctr,4);
 				if(!n)
 					createNew(ret,tsize);
 				for(auto iter=symtab[l.label].second.begin();iter!=symtab[l.label].second.end();iter++){
 					fout<<endl<<"T^"<<decToHex(*iter+1,6)<<"^02^"<<decToHex(locctr,4);
 				}
-				tsize=0;
+				tsize=2;
+				ret=-7;
 				n=1;
 			}
 		}
@@ -102,13 +102,11 @@ int main(){
 			}
 			len=3;
 			locctr+=3;
-		}
-		else if(l.opcode=="WORD"){
+		}else if(l.opcode=="WORD"){
 			locctr+=3;
 			len=3;
 			symVal=decToHex(atoi(l.operand.c_str()),6);
-		}
-		else if(l.opcode=="BYTE"){
+		}else if(l.opcode=="BYTE"){
 			if(l.operand[0]=='X'){
 				len=(l.operand.length()-3)/2;
 				symVal=l.operand.substr(2,l.operand.length()-3);
@@ -116,29 +114,28 @@ int main(){
 			else{
 				len=l.operand.length()-3;
 				for(int i=2;i<l.operand.length()-1;i++)
-					symVal+=(int)l.operand[i];
+					symVal+=decToHex(l.operand[i],2);
 			}
 			locctr+=len;
-		}
-		else if(l.opcode=="RESW"){
+		}else if(l.opcode=="RESW"){
 			locctr+=3*atoi(l.operand.c_str());
-		}
-		else if(l.opcode=="RESB"){
+		}else if(l.opcode=="RESB"){
 			locctr+=atoi(l.operand.c_str());
-		}
-		else{
+		}else{
 			cout<<"error: "<<l.opcode<<endl;
 			return 0;
 		}
 		if(len){
 			if(n){
 				fout<<endl<<"T^"<<decToHex(locctr-len,6)<<"^  ";
+				tsize=0;
 				ret=-2;
 				n=0;
 			}
 			if(tsize+len>30){
 				createNew(ret,tsize);
 				fout<<endl<<"T^"<<decToHex(locctr-len,6)<<"^  ";
+				tsize=0;
 				ret=-2;
 			}
 			ret=ret-opVal.length()-symVal.length()-1;
