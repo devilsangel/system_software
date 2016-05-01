@@ -11,13 +11,8 @@ map <string,pair<string,list<int>>> symtab;
 fstream fout("out");
 void opinit(){
 	fstream f("optab");
-	string line;
-	while(getline(f,line,'\n')){
-		stringstream s(line);
-		string op;
-		s>>op;
-		s>>optab[op];
-	}
+	string op;
+	while(f){f>>op;f>>optab[op];}
 }
 class Line
 {
@@ -49,7 +44,7 @@ int main(){
 	opinit();
 	fstream f("sic");
 	string line;
-	int locctr,size,stradr,ret=0,tsize=0,len=0;
+	int locctr,stradr,ret=0,tsize=0,len=0;
 	bool n=0;
 	string name;
 	while(getline(f,line,'\n')){
@@ -145,5 +140,7 @@ int main(){
 	}
 	createNew(ret,tsize);
 	fout.seekg(2+name.length()+7,fout.beg);
-	fout<<"^"<<decToHex(locctr-stradr,6)<<endl<<"T";	
+	fout<<"^"<<decToHex(locctr-stradr,6)<<endl<<"T";
+	fout.seekg(0,fout.end);
+	fout<<endl<<"E^"<<decToHex(stradr,6);	
 }

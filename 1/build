@@ -1,5 +1,0 @@
-g++ 1.cpp -std=c++11
-echo "">out
-./a.out
-cat out
-
